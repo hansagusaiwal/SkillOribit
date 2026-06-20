@@ -1,0 +1,523 @@
+import { useNavigate } from "react-router-dom";
+import AppLayout from "../components/layout/AppLayout";
+
+const scoreCards = [
+  {
+    label: "Technical Fit",
+    value: "92%",
+    icon: "trending_up",
+    iconClass: "text-emerald-500",
+  },
+  {
+    label: "Skill Match",
+    value: "89%",
+    icon: "verified",
+    iconClass: "text-emerald-500",
+  },
+  {
+    label: "Experience",
+    value: "87%",
+    icon: "check_circle",
+    iconClass: "text-amber-500",
+  },
+  {
+    label: "Recruitability",
+    value: "91%",
+    icon: "bolt",
+    iconClass: "text-emerald-500",
+  },
+  {
+    label: "Career Growth",
+    value: "88%",
+    icon: "auto_graph",
+    iconClass: "text-emerald-500",
+  },
+];
+
+const skills = [
+  {
+    label: "Python",
+    className: "bg-primary/10 text-primary border-primary/20",
+  },
+  {
+    label: "PyTorch",
+    className: "bg-primary/10 text-primary border-primary/20",
+  },
+  {
+    label: "TensorFlow",
+    className: "bg-primary/10 text-primary border-primary/20",
+  },
+  {
+    label: "AWS",
+    className: "bg-secondary-container/10 text-secondary border-secondary/20",
+  },
+  {
+    label: "Kubernetes",
+    className: "bg-secondary-container/10 text-secondary border-secondary/20",
+  },
+  {
+    label: "Distributed Systems",
+    className:
+      "bg-surface-container text-on-surface-variant border-outline-variant",
+  },
+  {
+    label: "CI/CD",
+    className:
+      "bg-surface-container text-on-surface-variant border-outline-variant",
+  },
+];
+
+const behavioralSignals = [
+  { label: "Collaboration", value: 94 },
+  { label: "Problem Solving", value: 88 },
+  { label: "Learning Velocity", value: 96 },
+];
+
+export default function CandidateProfilePage() {
+  const navigate = useNavigate();
+
+  return (
+    <AppLayout
+      title="Candidate Profile"
+      searchPlaceholder="Search candidates, skills, or insights..."
+    >
+      <div className="bg-[#f8fafc] px-lg pb-lg pt-[24px]">
+        {/* Hero Profile Section */}
+        <section className="relative mb-lg flex flex-col items-start justify-between gap-lg overflow-hidden rounded-2xl border border-outline-variant bg-white p-xl shadow-sm md:flex-row md:items-center">
+          <div className="relative z-10 flex items-center gap-xl">
+            <div className="relative">
+              <img
+                className="h-32 w-32 rounded-2xl object-cover ring-4 ring-primary-fixed"
+                alt="Aarav Mehta"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuApzyhL9ESYJsonGRDUkMuY1W2cYNyfNjYSr72qjQxYyvHHbBEEYCkZK9bJwBWEhqpBAE98muERP0LqIsWHQO4yMnftMUYcqqaj9OG9YvAO9Z9rE651wnzZFvfMmx5cPauaCAcKrSZx2OSSaVz1tfEChx2Runhdb6XuO_ckb_6MWjtV9TVpGZECGIrtwnvg584OZQH3_E2YQHNMkJxBBe3fMP7PAajjC8tt7Qfujm-czrs4e0iV5516fOj5Tcny6lCQmkRT9rR-4XGI"
+              />
+
+              <div className="absolute -bottom-2 -right-2 flex items-center justify-center rounded-lg border-2 border-white bg-emerald-500 p-1 text-white">
+                <span
+                  className="material-symbols-outlined text-sm"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  verified
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="font-headline-lg text-headline-lg text-on-surface">
+                Aarav Mehta
+              </h2>
+
+              <div className="mt-1 flex items-center gap-3">
+                <span className="font-semibold text-primary">
+                  Senior ML Engineer
+                </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-outline-variant" />
+                <span className="text-on-surface-variant">7.2 yrs exp</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-outline-variant" />
+                <span className="text-on-surface-variant">
+                  San Francisco, CA
+                </span>
+              </div>
+
+              <div className="mt-4 flex gap-2">
+                <button
+                  onClick={() => navigate("/shortlist-export")}
+                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-secondary px-lg py-2.5 font-label-md text-white shadow-md transition-all hover:opacity-90"
+                >
+                  <span className="material-symbols-outlined text-md">
+                    add_task
+                  </span>
+                  Add to Shortlist
+                </button>
+
+                <button
+                  onClick={() => navigate("/talent-twin")}
+                  className="flex items-center gap-2 rounded-xl border border-primary px-lg py-2.5 font-label-md text-primary transition-all hover:bg-primary/5"
+                >
+                  <span className="material-symbols-outlined text-md">
+                    compare_arrows
+                  </span>
+                  Compare
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative z-10 flex min-w-[200px] flex-col items-center rounded-2xl border border-primary/20 bg-primary-container/10 p-lg">
+            <span className="mb-2 font-label-md uppercase tracking-wider text-on-surface-variant">
+              Success Probability
+            </span>
+
+            <div className="relative mb-1 flex items-center justify-center">
+              <svg className="h-24 w-24">
+                <circle
+                  className="text-white/20"
+                  cx="48"
+                  cy="48"
+                  fill="transparent"
+                  r="40"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                />
+                <circle
+                  className="text-primary"
+                  cx="48"
+                  cy="48"
+                  fill="transparent"
+                  r="40"
+                  stroke="currentColor"
+                  strokeDasharray="251.2"
+                  strokeDashoffset="20.1"
+                  strokeLinecap="round"
+                  strokeWidth="8"
+                  style={{
+                    transform: "rotate(-90deg)",
+                    transformOrigin: "50% 50%",
+                  }}
+                />
+              </svg>
+
+              <span className="absolute text-2xl font-bold text-on-surface">
+                92%
+              </span>
+            </div>
+
+            <span className="text-sm font-bold text-emerald-600">
+              Ultra-High Potential
+            </span>
+          </div>
+        </section>
+
+        {/* Grid Layout */}
+        <div className="grid grid-cols-12 gap-lg">
+          {/* Left Column */}
+          <div className="col-span-12 flex flex-col gap-lg lg:col-span-8">
+            {/* Score Cards */}
+            <div className="grid grid-cols-2 gap-md md:grid-cols-3 xl:grid-cols-4">
+              {scoreCards.map((card) => (
+                <ScoreCard key={card.label} {...card} />
+              ))}
+            </div>
+
+            {/* Skills & Behavior */}
+            <div className="grid grid-cols-1 gap-lg md:grid-cols-2">
+              <div className="flex flex-col gap-md rounded-2xl border border-outline-variant bg-white p-lg">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-headline-md text-headline-md">
+                    Skill DNA
+                  </h3>
+                  <span className="material-symbols-outlined text-primary">
+                    psychology
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {skills.map((skill) => (
+                    <span
+                      key={skill.label}
+                      className={`rounded-lg border px-3 py-1.5 font-label-md ${skill.className}`}
+                    >
+                      {skill.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-md rounded-2xl border border-outline-variant bg-white p-lg">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-headline-md text-headline-md">
+                    Behavioral Signals
+                  </h3>
+                  <span className="material-symbols-outlined text-primary">
+                    analytics
+                  </span>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  {behavioralSignals.map((signal) => (
+                    <BehaviorSignal key={signal.label} {...signal} />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Experience Timeline */}
+            <div className="rounded-2xl border border-outline-variant bg-white p-lg">
+              <h3 className="mb-xl font-headline-md text-headline-md">
+                Experience Timeline
+              </h3>
+
+              <div className="relative space-y-8 before:absolute before:bottom-2 before:left-[11px] before:top-2 before:w-[2px] before:bg-outline-variant">
+                <TimelineItem
+                  borderClass="border-primary"
+                  title="Senior Machine Learning Engineer"
+                  company="TechFlow Systems"
+                  date="2021 — Present"
+                  description="Leading the core personalization engine team. Architected a distributed training pipeline that reduced model latency by 40%. Scaled production ML deployments to handle 10k+ requests per second using Kubernetes and AWS."
+                />
+
+                <TimelineItem
+                  borderClass="border-secondary"
+                  title="ML Research Associate"
+                  company="AI Labs Global"
+                  date="2018 — 2021"
+                  description="Published 3 papers on Computer Vision optimizations. Developed proprietary NLP preprocessing libraries used across the entire research division. Mentored 4 junior researchers in PyTorch best practices."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="col-span-12 flex flex-col gap-lg lg:col-span-4">
+            {/* AI Explanation */}
+            <div className="ai-glow relative flex flex-col gap-md overflow-hidden rounded-2xl border-t-4 bg-white p-lg">
+              <div className="absolute right-0 top-0 p-2 opacity-10">
+                <span className="material-symbols-outlined text-6xl text-tertiary">
+                  auto_awesome
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 text-tertiary">
+                <span className="material-symbols-outlined text-xl">
+                  auto_awesome
+                </span>
+                <h3 className="text-xs font-bold uppercase tracking-widest">
+                  SkillOrbit Intelligence
+                </h3>
+              </div>
+
+              <h4 className="font-headline-md text-headline-md text-on-surface">
+                Why Aarav is ranked #1
+              </h4>
+
+              <ul className="mt-2 flex flex-col gap-4">
+                <InsightItem>
+                  <strong>Proven Production ML:</strong> Rare combination of
+                  research-level deep learning and high-scale DevOps Kubernetes,
+                  AWS.
+                </InsightItem>
+
+                <InsightItem>
+                  <strong>Skill Overlap:</strong> 100% match for the required
+                  stack of PyTorch and distributed systems.
+                </InsightItem>
+
+                <InsightItem>
+                  <strong>High Activity:</strong> Recent GitHub contributions
+                  and LinkedIn activity suggest he is in a prime active
+                  exploration phase for new roles.
+                </InsightItem>
+              </ul>
+
+              <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-tertiary py-3 font-bold text-white transition-all hover:bg-tertiary-container">
+                <span className="material-symbols-outlined text-sm">
+                  rocket_launch
+                </span>
+                Generate Success Prediction
+              </button>
+            </div>
+
+            {/* Interview Preparation */}
+            <div className="flex flex-col gap-md rounded-2xl border border-outline-variant bg-white p-lg">
+              <h3 className="font-bold text-on-surface">
+                Suggested Interview Focus
+              </h3>
+
+              <div className="flex flex-col gap-3 rounded-xl bg-surface-container p-4">
+                <p className="text-xs italic text-on-surface-variant">
+                  &quot;Aarav&apos;s technical depth is clear. Focus your 1-on-1
+                  on his leadership style within TechFlow&apos;s recent team
+                  restructure.&quot;
+                </p>
+
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-on-surface">
+                    <span className="material-symbols-outlined text-lg text-primary">
+                      question_answer
+                    </span>
+                    Primary Question
+                  </div>
+
+                  <p className="text-body-sm text-on-surface-variant">
+                    How did you manage technical debt while scaling the
+                    personalization engine to 10k RPS?
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Market Presence */}
+            <div className="flex flex-col gap-md rounded-2xl border border-outline-variant bg-white p-lg">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-on-surface">Market Presence</h3>
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-600">
+                  High Density
+                </span>
+              </div>
+
+              <div className="relative overflow-hidden rounded-xl border border-primary/10 bg-gradient-to-br from-primary-fixed via-surface-container-low to-tertiary-fixed/40 p-4">
+                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-tertiary/10 blur-2xl" />
+                <div className="absolute -bottom-8 -left-8 h-24 w-24 rounded-full bg-primary/10 blur-2xl" />
+
+                <div className="relative z-10 flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">
+                      Location Signal
+                    </p>
+                    <p className="mt-1 text-lg font-bold text-on-surface">
+                      SF Bay Area
+                    </p>
+                  </div>
+
+                  <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white/70 shadow-sm">
+                    <span className="absolute h-10 w-10 animate-ping rounded-full bg-primary/20" />
+                    <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white">
+                      <span className="material-symbols-outlined text-[18px]">
+                        location_on
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="relative z-10 mt-5 grid grid-cols-2 gap-3">
+                  <div className="rounded-lg bg-white/75 p-3">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
+                      Candidate Density
+                    </p>
+                    <p className="mt-1 text-sm font-bold text-emerald-600">
+                      High
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg bg-white/75 p-3">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
+                      Relocation
+                    </p>
+                    <p className="mt-1 text-sm font-bold text-primary">Open</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="rounded-lg bg-surface-container-low p-3">
+                  <p className="font-semibold text-on-surface-variant">
+                    Current Location
+                  </p>
+                  <p className="mt-1 font-bold text-on-surface">
+                    San Francisco, CA
+                  </p>
+                </div>
+
+                <div className="rounded-lg bg-surface-container-low p-3">
+                  <p className="font-semibold text-on-surface-variant">
+                    Market Fit
+                  </p>
+                  <p className="mt-1 font-bold text-primary">Strong Match</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AppLayout>
+  );
+}
+
+function ScoreCard({
+  label,
+  value,
+  icon,
+  iconClass,
+}: {
+  label: string;
+  value: string;
+  icon: string;
+  iconClass: string;
+}) {
+  return (
+    <div className="flex min-h-[96px] flex-col justify-between rounded-xl border border-outline-variant bg-white p-md transition-shadow hover:shadow-md">
+      <span className="text-[11px] font-bold uppercase leading-4 tracking-wide text-on-surface-variant">
+        {label}
+      </span>
+
+      <div className="flex items-end justify-between gap-2">
+        <span className="text-[26px] font-bold leading-none text-on-surface">
+          {value}
+        </span>
+
+        <span
+          className={`material-symbols-outlined shrink-0 text-xl ${iconClass}`}
+          style={{ fontVariationSettings: "'FILL' 1" }}
+        >
+          {icon}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function BehaviorSignal({ label, value }: { label: string; value: number }) {
+  return (
+    <div>
+      <div className="mb-1 flex justify-between text-xs font-bold">
+        <span>{label}</span>
+        <span>{value}%</span>
+      </div>
+
+      <div className="h-1.5 w-full rounded-full bg-surface-container">
+        <div
+          className="h-1.5 rounded-full bg-primary"
+          style={{ width: `${value}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function TimelineItem({
+  borderClass,
+  title,
+  company,
+  date,
+  description,
+}: {
+  borderClass: string;
+  title: string;
+  company: string;
+  date: string;
+  description: string;
+}) {
+  return (
+    <div className="relative pl-10">
+      <div
+        className={`absolute left-0 top-1 z-10 h-6 w-6 rounded-full border-4 bg-white ${borderClass}`}
+      />
+
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center justify-between">
+          <h4 className="font-bold text-on-surface">{title}</h4>
+          <span className="rounded bg-surface-container px-2 py-1 text-xs font-bold">
+            {date}
+          </span>
+        </div>
+
+        <p className="text-sm font-semibold text-primary">{company}</p>
+
+        <p className="mt-2 text-body-sm leading-relaxed text-on-surface-variant">
+          {description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function InsightItem({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="flex gap-3">
+      <span className="material-symbols-outlined shrink-0 text-emerald-500">
+        check_circle
+      </span>
+      <span className="text-body-sm text-on-surface-variant">{children}</span>
+    </li>
+  );
+}
