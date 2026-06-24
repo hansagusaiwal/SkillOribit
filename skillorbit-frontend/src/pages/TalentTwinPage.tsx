@@ -1,4 +1,22 @@
+import { useState, useEffect } from "react";
 import AppLayout from "../components/layout/AppLayout";
+import { compareCandidates } from "../api";
+
+const aaravFeatures = {
+  skills_overlap: 0.95, years_experience: 7.0, company_prestige: 4,
+  job_hop_freq: 2.5, github_activity: 0.90, open_source_contribs: 45,
+  leetcode_score: 0.82, education_tier: 3, certifications_count: 3,
+  project_complexity: 0.85, tech_stack_diversity: 0.75,
+  endorsements_count: 110, career_growth_rate: 1.1, response_time_score: 0.95,
+};
+
+const priyaFeatures = {
+  skills_overlap: 0.70, years_experience: 9.0, company_prestige: 5,
+  job_hop_freq: 3.5, github_activity: 0.40, open_source_contribs: 5,
+  leetcode_score: 0.60, education_tier: 4, certifications_count: 6,
+  project_complexity: 0.65, tech_stack_diversity: 0.50,
+  endorsements_count: 180, career_growth_rate: 0.5, response_time_score: 0.70,
+};
 
 const topMatches = [
   {
@@ -29,6 +47,16 @@ const topMatches = [
 ];
 
 export default function TalentTwinPage() {
+  const [comparison, setComparison] = useState<Awaited<ReturnType<typeof compareCandidates>> | null>(null);
+  const [compareLoading, setCompareLoading] = useState(true);
+
+  useEffect(() => {
+    compareCandidates(aaravFeatures, priyaFeatures, "Aarav Mehta", "Priya Sharma")
+      .then(setComparison)
+      .catch(() => setComparison(null))
+      .finally(() => setCompareLoading(false));
+  }, []);
+
   return (
     <AppLayout
       title="Talent Twin Comparison"
@@ -261,105 +289,71 @@ export default function TalentTwinPage() {
               </div>
             </div>
 
-            {/* Recommendation + Table */}
+            {/* Recommendation + Table (Feature 5 - SHAP Comparison) */}
             <div className="col-span-12 flex flex-col gap-lg lg:col-span-8">
               <div className="relative overflow-hidden rounded-xl border border-white/20 bg-gradient-to-br from-tertiary-container to-tertiary p-lg text-on-tertiary shadow-lg shadow-tertiary/20">
                 <div className="relative z-10 flex flex-col items-start gap-lg md:flex-row md:items-center">
                   <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md">
-                    <span
-                      className="material-symbols-outlined text-4xl"
-                      style={{ fontVariationSettings: "'FILL' 1" }}
-                    >
-                      recommend
-                    </span>
+                    <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>recommend</span>
                   </div>
 
                   <div className="flex-1 space-y-2">
-                    <h3 className="font-headline-md text-headline-md">
-                      Recommended Candidate: Aarav Mehta
-                    </h3>
-
-                    <p className="text-body-sm leading-relaxed opacity-90">
-                      Aarav demonstrates the strongest
-                      &quot;Founder-Engineer&quot; mindset with 3 years of
-                      experience at Scale AI during their hyper-growth phase.
-                      His proficiency in Distributed Systems matches the Job
-                      DNA&apos;s &quot;Must-Haves&quot; at 98%, and his
-                      Production Readiness scores suggest zero ramp-up time for
-                      current sprint goals.
-                    </p>
-
-                    <div className="flex gap-4 pt-2">
-                      <button className="rounded-lg bg-white px-6 py-2 text-xs font-bold text-tertiary transition-opacity hover:bg-opacity-90">
-                        Schedule Interview
-                      </button>
-
-                      <button className="rounded-lg border border-white/40 bg-transparent px-6 py-2 text-xs font-bold text-white transition-colors hover:bg-white/10">
-                        See Detailed Reasoning
-                      </button>
-                    </div>
+                    {compareLoading ? (
+                      <div className="flex items-center gap-3">
+                        <span className="material-symbols-outlined animate-spin text-2xl">progress_activity</span>
+                        <span className="font-body-md">Running SHAP analysis...</span>
+                      </div>
+                    ) : comparison ? (
+                      <>
+                        <h3 className="font-headline-md text-headline-md">
+                          Winner: {comparison.winner}
+                        </h3>
+                        <p className="text-body-sm leading-relaxed opacity-90">
+                          {comparison.winner} scores {Math.max(comparison.score_a, comparison.score_b).toFixed(0)}/100 vs {Math.min(comparison.score_a, comparison.score_b).toFixed(0)}/100 — a delta of {Math.abs(comparison.score_delta).toFixed(1)} points.
+                        </p>
+                        <div className="flex gap-4 pt-2">
+                          <button className="rounded-lg bg-white px-6 py-2 text-xs font-bold text-tertiary transition-opacity hover:bg-opacity-90">
+                            Schedule Interview
+                          </button>
+                          <button className="rounded-lg border border-white/40 bg-transparent px-6 py-2 text-xs font-bold text-white transition-colors hover:bg-white/10">
+                            See Detailed Reasoning
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <p className="font-body-md">Unable to load comparison. Ensure the backend is running.</p>
+                    )}
                   </div>
                 </div>
-
                 <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan-300 opacity-20 blur-3xl" />
               </div>
 
-              <div className="flex-1 overflow-hidden rounded-xl border border-outline-variant bg-white shadow-sm">
-                <table className="w-full border-collapse text-left">
-                  <thead>
-                    <tr className="border-b border-outline-variant bg-surface-container-low">
-                      <MetricHeader>Key Metric</MetricHeader>
-                      <MetricHeader>Aarav Mehta</MetricHeader>
-                      <MetricHeader>Sarah Cho</MetricHeader>
-                      <MetricHeader>Marcus Thorne</MetricHeader>
-                    </tr>
-                  </thead>
-
-                  <tbody className="text-sm">
-                    <CompareRow
-                      metric="Core Stack Match"
-                      aarav={
-                        <span className="font-bold text-emerald-600">98%</span>
-                      }
-                      sarah={
-                        <span className="font-bold text-emerald-600">91%</span>
-                      }
-                      marcus={
-                        <span className="font-bold text-amber-600">78%</span>
-                      }
-                    />
-
-                    <CompareRow
-                      metric="Startup Velocity"
-                      aarav={<Tag color="emerald">High</Tag>}
-                      sarah={<Tag color="emerald">High</Tag>}
-                      marcus={<Tag color="amber">Moderate</Tag>}
-                    />
-
-                    <CompareRow
-                      metric="Recruitability (Intent)"
-                      aarav={
-                        <span className="font-bold text-emerald-600">High</span>
-                      }
-                      sarah={
-                        <span className="font-bold text-amber-600">
-                          Med-Low
-                        </span>
-                      }
-                      marcus={
-                        <span className="font-bold text-emerald-600">High</span>
-                      }
-                    />
-
-                    <tr className="transition-colors hover:bg-surface-container-lowest">
-                      <td className="p-4 font-medium">Est. Compensation</td>
-                      <td className="p-4 font-mono text-xs">$220k - $240k</td>
-                      <td className="p-4 font-mono text-xs">$250k - $275k</td>
-                      <td className="p-4 font-mono text-xs">$240k - $260k</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              {comparison && (
+                <div className="flex-1 overflow-hidden rounded-xl border border-outline-variant bg-white shadow-sm">
+                  <table className="w-full border-collapse text-left">
+                    <thead>
+                      <tr className="border-b border-outline-variant bg-surface-container-low">
+                        <MetricHeader>Feature</MetricHeader>
+                        <MetricHeader>Delta (SHAP)</MetricHeader>
+                        <MetricHeader>Favors</MetricHeader>
+                      </tr>
+                    </thead>
+                    <tbody className="text-sm">
+                      {comparison.key_differences.map((diff) => (
+                        <tr key={diff.feature} className="border-b border-outline-variant transition-colors hover:bg-surface-container-lowest">
+                          <td className="p-4 font-medium">{diff.feature}</td>
+                          <td className="p-4">
+                            <span className={diff.delta >= 0 ? "font-bold text-emerald-600" : "font-bold text-amber-600"}>
+                              {diff.delta >= 0 ? "+" : ""}{diff.delta.toFixed(2)}
+                            </span>
+                          </td>
+                          <td className="p-4 font-bold">{diff.favors}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
 
@@ -508,44 +502,6 @@ function MetricHeader({ children }: { children: string }) {
     <th className="p-4 font-label-md text-xs uppercase text-on-surface-variant">
       {children}
     </th>
-  );
-}
-
-function CompareRow({
-  metric,
-  aarav,
-  sarah,
-  marcus,
-}: {
-  metric: string;
-  aarav: React.ReactNode;
-  sarah: React.ReactNode;
-  marcus: React.ReactNode;
-}) {
-  return (
-    <tr className="border-b border-outline-variant transition-colors hover:bg-surface-container-lowest">
-      <td className="p-4 font-medium">{metric}</td>
-      <td className="p-4">{aarav}</td>
-      <td className="p-4">{sarah}</td>
-      <td className="p-4">{marcus}</td>
-    </tr>
-  );
-}
-
-function Tag({
-  color,
-  children,
-}: {
-  color: "emerald" | "amber";
-  children: string;
-}) {
-  const className =
-    color === "emerald"
-      ? "bg-emerald-100 text-emerald-800"
-      : "bg-amber-100 text-amber-800";
-
-  return (
-    <span className={`rounded px-2 py-1 text-xs ${className}`}>{children}</span>
   );
 }
 

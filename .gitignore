@@ -36,3 +36,8 @@ venv/
 .env.local
 .env.production
 .env.development
+
+# Generated ML artifacts
+skillorbit-backend/ml/*.pkl
+skillorbit-backend/ml/*.npy
+skillorbit-backend/ml/ranker_data/

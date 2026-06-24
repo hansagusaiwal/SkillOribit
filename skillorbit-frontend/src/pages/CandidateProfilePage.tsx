@@ -1,5 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AppLayout from "../components/layout/AppLayout";
+import { explainCandidate } from "../api";
 
 const scoreCards = [
   {
@@ -73,8 +75,26 @@ const behavioralSignals = [
   { label: "Learning Velocity", value: 96 },
 ];
 
+const defaultCandidateFeatures: Record<string, number> = {
+  skills_overlap: 0.92, years_experience: 7.2, company_prestige: 4,
+  job_hop_freq: 2.8, github_activity: 0.85, open_source_contribs: 42,
+  leetcode_score: 0.88, education_tier: 3, certifications_count: 4,
+  project_complexity: 0.85, tech_stack_diversity: 0.78,
+  endorsements_count: 156, career_growth_rate: 1.2, response_time_score: 0.82,
+};
+
 export default function CandidateProfilePage() {
   const navigate = useNavigate();
+  const { candidateId } = useParams();
+  const [explanation, setExplanation] = useState<Awaited<ReturnType<typeof explainCandidate>> | null>(null);
+  const [explainLoading, setExplainLoading] = useState(true);
+
+  useEffect(() => {
+    explainCandidate(defaultCandidateFeatures, 5)
+      .then(setExplanation)
+      .catch(() => setExplanation(null))
+      .finally(() => setExplainLoading(false));
+  }, [candidateId]);
 
   return (
     <AppLayout
@@ -269,52 +289,54 @@ export default function CandidateProfilePage() {
 
           {/* Right Column */}
           <div className="col-span-12 flex flex-col gap-lg lg:col-span-4">
-            {/* AI Explanation */}
+            {/* AI Explanation (Feature 5 - SHAP) */}
             <div className="ai-glow relative flex flex-col gap-md overflow-hidden rounded-2xl border-t-4 bg-white p-lg">
               <div className="absolute right-0 top-0 p-2 opacity-10">
-                <span className="material-symbols-outlined text-6xl text-tertiary">
-                  auto_awesome
-                </span>
+                <span className="material-symbols-outlined text-6xl text-tertiary">auto_awesome</span>
               </div>
 
               <div className="flex items-center gap-2 text-tertiary">
-                <span className="material-symbols-outlined text-xl">
-                  auto_awesome
-                </span>
-                <h3 className="text-xs font-bold uppercase tracking-widest">
-                  SkillOrbit Intelligence
-                </h3>
+                <span className="material-symbols-outlined text-xl">auto_awesome</span>
+                <h3 className="text-xs font-bold uppercase tracking-widest">AI Explanation (SHAP)</h3>
               </div>
 
-              <h4 className="font-headline-md text-headline-md text-on-surface">
-                Why Aarav is ranked #1
-              </h4>
+              {explainLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <span className="material-symbols-outlined animate-spin text-2xl text-tertiary">progress_activity</span>
+                </div>
+              ) : explanation ? (
+                <>
+                  <h4 className="font-headline-md text-headline-md text-on-surface">
+                    Score: {explanation.score}/100 (baseline: {explanation.base_value})
+                  </h4>
 
-              <ul className="mt-2 flex flex-col gap-4">
-                <InsightItem>
-                  <strong>Proven Production ML:</strong> Rare combination of
-                  research-level deep learning and high-scale DevOps Kubernetes,
-                  AWS.
-                </InsightItem>
+                  <div className="space-y-3">
+                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">Top Drivers</p>
+                    {explanation.top_drivers.map((d) => (
+                      <div key={d.raw_key} className="flex items-center justify-between rounded-lg bg-emerald-50 p-2">
+                        <span className="text-sm text-on-surface">{d.feature}</span>
+                        <span className="text-sm font-bold text-emerald-600">+{d.shap_value.toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
 
-                <InsightItem>
-                  <strong>Skill Overlap:</strong> 100% match for the required
-                  stack of PyTorch and distributed systems.
-                </InsightItem>
-
-                <InsightItem>
-                  <strong>High Activity:</strong> Recent GitHub contributions
-                  and LinkedIn activity suggest he is in a prime active
-                  exploration phase for new roles.
-                </InsightItem>
-              </ul>
-
-              <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-tertiary py-3 font-bold text-white transition-all hover:bg-tertiary-container">
-                <span className="material-symbols-outlined text-sm">
-                  rocket_launch
-                </span>
-                Generate Success Prediction
-              </button>
+                  {explanation.top_detractors.length > 0 && (
+                    <div className="space-y-3">
+                      <p className="text-xs font-bold uppercase tracking-wider text-error">Top Detractors</p>
+                      {explanation.top_detractors.map((d) => (
+                        <div key={d.raw_key} className="flex items-center justify-between rounded-lg bg-red-50 p-2">
+                          <span className="text-sm text-on-surface">{d.feature}</span>
+                          <span className="text-sm font-bold text-error">{d.shap_value.toFixed(2)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="text-sm text-on-surface-variant">
+                  Unable to load SHAP explanation. Ensure the backend is running.
+                </p>
+              )}
             </div>
 
             {/* Interview Preparation */}
@@ -511,13 +533,4 @@ function TimelineItem({
   );
 }
 
-function InsightItem({ children }: { children: React.ReactNode }) {
-  return (
-    <li className="flex gap-3">
-      <span className="material-symbols-outlined shrink-0 text-emerald-500">
-        check_circle
-      </span>
-      <span className="text-body-sm text-on-surface-variant">{children}</span>
-    </li>
-  );
-}
+
