@@ -99,3 +99,115 @@ class SimilarCandidate(BaseModel):
     company: str
     skills: str
     similarity: float
+
+
+class JDExtractRequest(BaseModel):
+    jd_text: str
+    use_zero_shot: bool = False
+
+
+class ExtractedSkillOut(BaseModel):
+    name: str
+    category: str
+    is_must_have: bool
+    is_nice_to_have: bool
+    context: str
+    confidence: float
+
+
+class JDExtractResponse(BaseModel):
+    role_title: str
+    role_category: str
+    experience_level: str
+    min_years: Optional[int] = None
+    max_years: Optional[int] = None
+    must_have_skills: list[ExtractedSkillOut] = []
+    nice_to_have_skills: list[ExtractedSkillOut] = []
+    negative_signals: list[str] = []
+    all_skills: list[str] = []
+    summary: dict = {}
+
+
+# ── Feature 4: Hidden Gem Detection ──────────────────────────────────
+
+class HiddenGemDetectRequest(BaseModel):
+    top_k: int = 20
+
+
+class HiddenGemResult(BaseModel):
+    gem_rank: int
+    id: str
+    name: str
+    role: str
+    company: str
+    successScore: float
+    skillMatch: float
+    learningVelocity: float
+    gem_score: float
+    gem_reason: str
+
+
+class HiddenGemDetectResponse(BaseModel):
+    gems: list[HiddenGemResult]
+
+
+# ── Feature 5: Explainability ────────────────────────────────────────
+
+class ExplainCandidateRequest(BaseModel):
+    candidate: dict
+    top_n: int = 5
+
+
+class ShapFeature(BaseModel):
+    feature: str
+    raw_key: str
+    shap_value: float
+    candidate_value: float
+    impact: str
+
+
+class ExplainCandidateResponse(BaseModel):
+    score: float
+    base_value: float
+    top_drivers: list[ShapFeature]
+    top_detractors: list[ShapFeature]
+    all_shap: dict
+
+
+class CompareCandidatesRequest(BaseModel):
+    candidate_a: dict
+    candidate_b: dict
+    name_a: str = "Candidate A"
+    name_b: str = "Candidate B"
+
+
+class KeyDifference(BaseModel):
+    feature: str
+    delta: float
+    favors: str
+
+
+class CompareCandidatesResponse(BaseModel):
+    winner: str
+    score_a: float
+    score_b: float
+    score_delta: float
+    key_differences: list[KeyDifference]
+
+
+class GlobalImportanceItem(BaseModel):
+    feature: str
+    mean_abs_shap: float
+
+
+class GlobalImportanceResponse(BaseModel):
+    importance: list[GlobalImportanceItem]
+
+
+class CopilotExplanationRequest(BaseModel):
+    candidate: dict
+    name: str = "This candidate"
+
+
+class CopilotExplanationResponse(BaseModel):
+    explanation: str

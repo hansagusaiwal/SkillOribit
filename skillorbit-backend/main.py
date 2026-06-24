@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import auth, jobs, candidates, shortlist, dashboard, rank
+from routes import auth, jobs, candidates, shortlist, dashboard, rank, jd_skills, hidden_gems, explainability
 
 app = FastAPI(title="SkillOrbit API", version="1.0.0")
 
@@ -18,6 +18,9 @@ app.include_router(candidates.router, prefix="/api/candidates")
 app.include_router(shortlist.router, prefix="/api/shortlist")
 app.include_router(dashboard.router, prefix="/api/dashboard")
 app.include_router(rank.router, prefix="/api/candidates")
+app.include_router(jd_skills.router, prefix="/api/jd-skills")
+app.include_router(hidden_gems.router, prefix="/api/hidden-gems")
+app.include_router(explainability.router, prefix="/api/explain")
 
 
 @app.get("/api/health")
