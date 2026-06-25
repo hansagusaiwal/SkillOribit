@@ -307,3 +307,41 @@ export function getMarketReport() {
     }[];
   }>("/market-insight/report");
 }
+
+// ── Feature 9: Recruitability Prediction ────────────────────────────
+
+export function predictRecruitability(candidate: Record<string, number>) {
+  return api.post<{
+    recruitable_prob: number;
+    recruitable_label: string;
+    top_signals: { feature: string; value: number; direction: string; importance: number }[];
+    urgency_flag: boolean;
+    recommended_action: string;
+  }>("/recruitability/predict", { candidate });
+}
+
+export function batchPredictRecruitability(candidates: { candidate_id: string; name: string; features: Record<string, number> }[]) {
+  return api.post<{
+    results: { candidate_id: string; name: string; recruitable_prob: number; recruitable_label: string; urgency_flag: boolean }[];
+  }>("/recruitability/batch-predict", { candidates });
+}
+
+// ── Feature 10: Copilot / RAG Chatbot ───────────────────────────────
+
+export function copilotQuery(query: string, topK: number = 8) {
+  return api.post<{
+    answer: string;
+    intent: string;
+    sources: string[];
+    chunks_used: number;
+    latency_s: number;
+  }>("/copilot/query", { query, top_k: topK });
+}
+
+export function copilotReset() {
+  return api.post<{ status: string }>("/copilot/reset", {});
+}
+
+export function copilotSuggestions() {
+  return api.get<{ questions: string[] }>("/copilot/suggestions");
+}

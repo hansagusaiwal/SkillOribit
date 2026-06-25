@@ -364,3 +364,76 @@ class MarketReportResponse(BaseModel):
 class MarketClustersResponse(BaseModel):
     clusters: list[str]
     locations: list[str]
+
+
+# ── Feature 9: Recruitability Prediction ─────────────────────────────
+
+class RecruitabilityRequest(BaseModel):
+    candidate: dict
+
+
+class RecruitabilityTopSignal(BaseModel):
+    feature: str
+    value: float
+    direction: str
+    importance: float
+
+
+class RecruitabilityResponse(BaseModel):
+    recruitable_prob: float
+    recruitable_label: str
+    top_signals: list[RecruitabilityTopSignal]
+    urgency_flag: bool
+    recommended_action: str
+
+
+class BatchRecruitabilityCandidate(BaseModel):
+    candidate_id: str = ""
+    name: str = ""
+    features: dict
+
+
+class BatchRecruitabilityRequest(BaseModel):
+    candidates: list[BatchRecruitabilityCandidate]
+
+
+class BatchRecruitabilityResult(BaseModel):
+    candidate_id: str
+    name: str
+    recruitable_prob: float
+    recruitable_label: str
+    urgency_flag: bool
+
+
+class BatchRecruitabilityResponse(BaseModel):
+    results: list[BatchRecruitabilityResult]
+
+
+# ── Feature 10: Copilot / RAG Chatbot ───────────────────────────────
+
+class CopilotQueryRequest(BaseModel):
+    query: str
+    top_k: int = 8
+
+
+class CopilotSource(BaseModel):
+    candidate_id: str
+    chunk_type: str
+    content: str
+    relevance: float
+
+
+class CopilotQueryResponse(BaseModel):
+    answer: str
+    intent: str
+    sources: list[str]
+    chunks_used: int
+    latency_s: float
+
+
+class CopilotResetResponse(BaseModel):
+    status: str
+
+
+class CopilotSuggestionsResponse(BaseModel):
+    questions: list[str]
