@@ -1,4 +1,15 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+const rawBaseUrl = (
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:8000/api"
+).trim();
+
+const BASE_URL = (
+  /^https?:\/\//i.test(rawBaseUrl)
+    ? rawBaseUrl
+    : `https://${rawBaseUrl}`
+).replace(/\/+$/, "");
+
+console.log("SkillOrbit API URL:", BASE_URL);
 
 export class ApiError extends Error {
   status: number;
