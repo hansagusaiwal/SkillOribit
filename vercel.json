@@ -1,0 +1,7 @@
+{
+  "rootDirectory": "skillorbit-frontend",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install"
+}
