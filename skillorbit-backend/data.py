@@ -5,13 +5,18 @@ import random
 _BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 _DEFAULT_DATA_PATH = os.path.join(_BACKEND_DIR, "data", "candidates.jsonl")
 
-RAW_CANDIDATES_PATH = os.environ.get(
-    "SKILLORBIT_CANDIDATES_PATH",
-    _DEFAULT_DATA_PATH,
-)
+_RAILWAY_VOLUME_PATH = os.path.join(os.path.sep, "data", "candidates.jsonl")
+
+RAW_CANDIDATES_PATH = os.environ.get("SKILLORBIT_CANDIDATES_PATH", "")
+if not RAW_CANDIDATES_PATH or not os.path.isfile(RAW_CANDIDATES_PATH):
+    if os.path.isfile(_RAILWAY_VOLUME_PATH):
+        RAW_CANDIDATES_PATH = _RAILWAY_VOLUME_PATH
+    else:
+        RAW_CANDIDATES_PATH = _DEFAULT_DATA_PATH
 MAX_CANDIDATES = int(os.environ.get("SKILLORBIT_MAX_CANDIDATES", "2000"))
 random.seed(42)
-
+print("RAW_CANDIDATES_PATH =", RAW_CANDIDATES_PATH)
+print("FILE EXISTS =", os.path.exists(RAW_CANDIDATES_PATH))
 
 def _compute_ml_features(candidate: dict) -> dict:
     p = candidate["profile"]
